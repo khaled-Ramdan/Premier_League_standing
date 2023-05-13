@@ -6,9 +6,10 @@ const long long N = 3e5 + 7, Mod = 1e9 + 7, INF = 2e18;
 ll inv(ll a, ll b = Mod) { return 1 < a ? b - inv(b % a, a) * b / a : 1; }
 const int dx[9] = {0, 0, 1, -1, 1, 1, -1, -1, 0};
 const int dy[9] = {1, -1, 0, 0, -1, 1, 1, -1, 0};
-vector<string> teamNameWithId = {"no", "a", "b", "c", "d", "e", "f"};
-string round_num, date, home_team, away_team, home_goals_str, away_goals_str, result;
-
+vector<string> teamNameWithId;
+map<string, int> idForTeamName;
+string round_num_str, date, home_team, away_team, home_goals_str, away_goals_str, result;
+int numberOfteams;
 class Round
 {
 public:
@@ -17,17 +18,17 @@ public:
     bool homeTeamWins = 0, awayTeamWins = 0;
     Round(int roundNumber, int homeTeamId, int awayTeamId, int homeTeamGaols, int awayTeamGoals, string roundDate, char state)
     {
-        stringstream ss;
-        ss << round_num;
-        ss >> roundNumber;
+        // stringstream ss;
+        // ss << round_num;
+        // ss >> roundNumber;
         this->roundNumber = roundNumber;
         this->homeTeamId = homeTeamId;
         this->awayTeamId = awayTeamId;
-        ss << home_goals_str;
-        ss >> homeTeamGaols;
+        // ss << home_goals_str;
+        // ss >> homeTeamGaols;
         this->homeTeamGaols = homeTeamGaols;
-        ss << away_goals_str;
-        ss >> awayTeamGoals;
+        // ss << away_goals_str;
+        // ss >> awayTeamGoals;
         this->awayTeamGoals = awayTeamGoals;
         this->roundDate = date;
         if (state == 'H')
@@ -130,17 +131,16 @@ public:
     }
 };
 
-void solve()
+void solve(vector<Round> &rounds)
 {
     int n;
-    Round r1 = Round(1, 1, 2, 2, 1, "2022/8/5", 'H'); // a wins b lose
-    Round r2 = Round(1, 3, 4, 2, 2, "2022/8/6", 'D'); // draw c d
-    Round r3 = Round(1, 1, 3, 1, 4, "2022/8/7", 'A'); // c wins a lose
-    Round r4 = Round(1, 2, 4, 5, 3, "2022/8/8", 'H'); // b wins d lose
-    vector<Round> v = {r1, r2, r3, r4};
-    Solution sol(4, v, 0, "2022/8/8");
+    // Round r1 = Round(1, 1, 2, 2, 1, "2022/8/5", 'H'); // a wins b lose
+    // Round r2 = Round(1, 3, 4, 2, 2, "2022/8/6", 'D'); // draw c d
+    // Round r3 = Round(1, 1, 3, 1, 4, "2022/8/7", 'A'); // c wins a lose
+    // Round r4 = Round(1, 2, 4, 5, 3, "2022/8/8", 'H'); // b wins d lose
+    // vector<Round> v = {r1, r2, r3, r4};
+    Solution sol(numberOfteams, rounds, 30);
     auto stand = sol.generateStanding();
-
 
     // output file
     ofstream outputFile;
@@ -192,62 +192,95 @@ void solve()
 
     ////
 }
-int main()
+vector<Round> take_input(string path)
 {
-    IO;
-    int TC = 1;
-    //Open the CSV file for reading
-    ifstream input_file("games.csv");
+    vector<Round> inputRounds;
+    // Open the CSV file for reading
+    ifstream input_file(path);
 
     // Check if the file was opened successfully
-    if (!input_file.is_open()) {
+    if (!input_file.is_open())
+    {
         cout << "Error: Unable to open input file";
-        return 1;
+        exit(1);
     }
 
     string line;
 
     // Ignore the first line of the file (header row)
     getline(input_file, line);
-
+    int teamId = 1;
     // Read in each line of the CSV file
-    while (getline(input_file, line)){
+    while (getline(input_file, line))
+    {
         stringstream ss(line);
         // Parse the data fields from the line
-        getline(ss, round_num, ',');
+        getline(ss, round_num_str, ',');
         getline(ss, date, ',');
         getline(ss, home_team, ',');
         getline(ss, away_team, ',');
         getline(ss, home_goals_str, ',');
         getline(ss, away_goals_str, ',');
         getline(ss, result, ',');
-
-        int home_goals, away_goals;
-
+        int home_goals, away_goals, round_num;
         // Convert the numeric fields to integers
-        try {
+        try
+        {
+            round_num = stoi(round_num_str);
             home_goals = stoi(home_goals_str);
             away_goals = stoi(away_goals_str);
-        } catch (const invalid_argument& e) {
+        }
+        catch (const invalid_argument &e)
+        {
             cerr << "Error: Invalid integer value for home goals or away goals in line: " << line << '\n';
             continue;
         }
 
         // Validate the result field
-        if (away_goals > home_goals && result != "A") {
-            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
-            exit(1);
-        } else if (home_goals > away_goals && result != "H") {
-            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
-            exit(1);
-        } else if (home_goals == away_goals && result != "D") {
+        if (away_goals > home_goals && result != "A")
+        {
             cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
             exit(1);
         }
+        else if (home_goals > away_goals && result != "H")
+        {
+            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        }
+        else if (home_goals == away_goals && result != "D")
+        {
+            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        }
+        int homeTeamId = 0, awayTeamId = 0;
+        if (idForTeamName[home_team])
+            homeTeamId = idForTeamName[home_team];
+        else
+            homeTeamId = idForTeamName[home_team] = teamId++;
 
+        if (idForTeamName[away_team])
+            awayTeamId = idForTeamName[away_team];
+        else
+            awayTeamId = idForTeamName[away_team] = teamId++;
+
+        Round r = Round(round_num, homeTeamId, awayTeamId, home_goals, away_goals, date, result[0]);
+        inputRounds.push_back(r);
     }
-
-    // cin >> TC;
-    while (TC--)
-        solve();
+    numberOfteams = idForTeamName.size();
+    teamNameWithId.resize(numberOfteams + 1);
+    for (auto &it : idForTeamName)
+    {
+        teamNameWithId[it.second] = it.first;
+    }
+    return inputRounds;
+}
+int main()
+{
+    // IO;
+    string path;
+    cout << "Enter path for csv file: ";
+    getline(cin, path);
+    cout << path << endl;
+    auto rounds = take_input(path);
+    solve(rounds);
 }
