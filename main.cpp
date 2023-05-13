@@ -36,7 +36,43 @@ public:
         else if (state == 'A')
             awayTeamWins = 1;
     }
+    bool operator<(const Round& other) const {
+        return isEarlierDate(date, other.roundDate);
+    }
+
+    bool operator>(const Round& other) const {
+        return other < *this;
+    }
+
+
 };
+
+
+
+// TODO: this  is a function that  returns the earlier date, make it a method inside the Round class cuz idk how to do it, thank you!
+bool isEarlierDate(const std::string& date1, const std::string& date2) {
+    int day1, month1, year1;
+    int day2, month2, year2;
+
+    sscanf(date1.c_str(), "%d/%d/%d", &day1, &month1, &year1);
+    sscanf(date2.c_str(), "%d/%d/%d", &day2, &month2, &year2);
+
+    if (year1 < year2)
+        return true;
+    else if (year1 > year2)
+        return false;
+
+    if (month1 < month2)
+        return true;
+    else if (month1 > month2)
+        return false;
+
+    if (day1 < day2)
+        return true;
+    else
+        return false;
+}
+
 class Team
 {
 public:
