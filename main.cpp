@@ -7,6 +7,8 @@ ll inv(ll a, ll b = Mod) { return 1 < a ? b - inv(b % a, a) * b / a : 1; }
 const int dx[9] = {0, 0, 1, -1, 1, 1, -1, -1, 0};
 const int dy[9] = {1, -1, 0, 0, -1, 1, 1, -1, 0};
 vector<string> teamNameWithId = {"no", "a", "b", "c", "d", "e", "f"};
+string round_num, date, home_team, away_team, home_goals_str, away_goals_str, result;
+
 class Round
 {
 public:
@@ -15,12 +17,19 @@ public:
     bool homeTeamWins = 0, awayTeamWins = 0;
     Round(int roundNumber, int homeTeamId, int awayTeamId, int homeTeamGaols, int awayTeamGoals, string roundDate, char state)
     {
+        stringstream ss;
+        ss << round_num;
+        ss >> roundNumber;
         this->roundNumber = roundNumber;
         this->homeTeamId = homeTeamId;
         this->awayTeamId = awayTeamId;
+        ss << home_goals_str;
+        ss >> homeTeamGaols;
         this->homeTeamGaols = homeTeamGaols;
+        ss << away_goals_str;
+        ss >> awayTeamGoals;
         this->awayTeamGoals = awayTeamGoals;
-        this->roundDate = roundDate;
+        this->roundDate = date;
         if (state == 'H')
             homeTeamWins = 1;
         else if (state == 'A')
@@ -141,6 +150,58 @@ int main()
 {
     IO;
     int TC = 1;
+       // Open the CSV file for reading
+    ifstream input_file("games.csv");
+
+    // Check if the file was opened successfully
+    if (!input_file.is_open()) {
+        cout << "Error: Unable to open input file";
+        return 1;
+    }
+
+    string line;
+
+    // Ignore the first line of the file (header row)
+    getline(input_file, line);
+
+
+    // Read in each line of the CSV file
+    while (getline(input_file, line)){
+        stringstream ss(line);
+        // Parse the data fields from the line
+        getline(ss, round_num, ',');
+        getline(ss, date, ',');
+        getline(ss, home_team, ',');
+        getline(ss, away_team, ',');
+        getline(ss, home_goals_str, ',');
+        getline(ss, away_goals_str, ',');
+        getline(ss, result, ',');
+
+        int home_goals, away_goals;
+
+        // Convert the numeric fields to integers
+        try {
+            home_goals = stoi(home_goals_str);
+            away_goals = stoi(away_goals_str);
+        } catch (const invalid_argument& e) {
+            cerr << "Error: Invalid integer value for home goals or away goals in line: " << line << '\n';
+            continue;
+        }
+
+        // Validate the result field
+        if (away_goals > home_goals && result != "A") {
+            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        } else if (home_goals > away_goals && result != "H") {
+            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        } else if (home_goals == away_goals && result != "D") {
+            cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        }
+
+    }
+
     // cin >> TC;
     while (TC--)
         solve();
