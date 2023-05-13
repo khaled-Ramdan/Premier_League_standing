@@ -140,17 +140,63 @@ void solve()
     vector<Round> v = {r1, r2, r3, r4};
     Solution sol(4, v, 0, "2022/8/8");
     auto stand = sol.generateStanding();
+
+
+    // output file
+    ofstream outputFile;
+    outputFile.open("outputFile.csv");
+    if (!outputFile.is_open())
+    {
+        cout << "Error in opening the output file\n";
+        cout << "Close the output file if it is open....\n";
+        return;
+    }
+    outputFile << "#"
+               << ","
+               << "Team"
+               << ","
+               << "MatchPlayed"
+               << ","
+               << "W"
+               << ","
+               << "D"
+               << ","
+               << "L"
+               << ","
+               << "Goals For"
+               << ","
+               << "Goals Against"
+               << ","
+               << "G Diff"
+               << ","
+               << "Points"
+               << endl;
     for (int i = 1; i < stand.size(); i++)
     {
         auto it = stand[i];
+        outputFile << i << ","
+                   << it.teamName << ","
+                   << (it.win + it.draw + it.loss) << ","
+                   << it.win << ","
+                   << it.draw << ","
+                   << it.loss << ","
+                   << it.goalsFor << ","
+                   << it.goalsAgainst << ","
+                   << it.goalsFor - it.goalsAgainst << ","
+                   << it.win * 3 + it.draw
+                   << endl;
         cout << i << "   " << it.teamName << " " << it.win << " " << it.draw << " " << it.loss << endl;
     }
+
+    outputFile.close();
+
+    ////
 }
 int main()
 {
     IO;
     int TC = 1;
-       // Open the CSV file for reading
+    //Open the CSV file for reading
     ifstream input_file("games.csv");
 
     // Check if the file was opened successfully
@@ -163,7 +209,6 @@ int main()
 
     // Ignore the first line of the file (header row)
     getline(input_file, line);
-
 
     // Read in each line of the CSV file
     while (getline(input_file, line)){
