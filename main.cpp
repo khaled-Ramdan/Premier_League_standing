@@ -10,6 +10,7 @@ vector<string> teamNameWithId;
 map<string, int> idForTeamName;
 string round_num_str, date, home_team, away_team, home_goals_str, away_goals_str, result;
 int numberOfteams;
+bool isEarlierDate(const std::string &date1, const std::string &date2);
 class Round
 {
 public:
@@ -18,17 +19,10 @@ public:
     bool homeTeamWins = 0, awayTeamWins = 0;
     Round(int roundNumber, int homeTeamId, int awayTeamId, int homeTeamGaols, int awayTeamGoals, string roundDate, char state)
     {
-        // stringstream ss;
-        // ss << round_num;
-        // ss >> roundNumber;
         this->roundNumber = roundNumber;
         this->homeTeamId = homeTeamId;
         this->awayTeamId = awayTeamId;
-        // ss << home_goals_str;
-        // ss >> homeTeamGaols;
         this->homeTeamGaols = homeTeamGaols;
-        // ss << away_goals_str;
-        // ss >> awayTeamGoals;
         this->awayTeamGoals = awayTeamGoals;
         this->roundDate = date;
         if (state == 'H')
@@ -36,21 +30,10 @@ public:
         else if (state == 'A')
             awayTeamWins = 1;
     }
-    bool operator<(const Round& other) const {
-        return isEarlierDate(date, other.roundDate);
-    }
-
-    bool operator>(const Round& other) const {
-        return other < *this;
-    }
-
-
 };
 
-
-
-// TODO: this  is a function that  returns the earlier date, make it a method inside the Round class cuz idk how to do it, thank you!
-bool isEarlierDate(const std::string& date1, const std::string& date2) {
+bool isEarlierDate(const std::string &date1, const std::string &date2)
+{
     int day1, month1, year1;
     int day2, month2, year2;
 
@@ -132,7 +115,7 @@ public:
         if (wantedRound and round.roundNumber > wantedRound) // 17
             return;
 
-        if (!wantedRound and round.roundDate > wantedDate)
+        if (!wantedRound and isEarlierDate(wantedDate, round.roundDate))
             return;
 
         answer[homeTeamId].goalsFor += round.homeTeamGaols; // 2 [1 , 3] ==> [5,2]
@@ -170,14 +153,8 @@ public:
 void solve(vector<Round> &rounds)
 {
     int n;
-    // Round r1 = Round(1, 1, 2, 2, 1, "2022/8/5", 'H'); // a wins b lose
-    // Round r2 = Round(1, 3, 4, 2, 2, "2022/8/6", 'D'); // draw c d
-    // Round r3 = Round(1, 1, 3, 1, 4, "2022/8/7", 'A'); // c wins a lose
-    // Round r4 = Round(1, 2, 4, 5, 3, "2022/8/8", 'H'); // b wins d lose
-    // vector<Round> v = {r1, r2, r3, r4};
-    Solution sol(numberOfteams, rounds, 30);
+    Solution sol(numberOfteams, rounds, 0, "17/09/2022");
     auto stand = sol.generateStanding();
-
     // output file
     ofstream outputFile;
     outputFile.open("outputFile.csv");
