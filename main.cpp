@@ -60,6 +60,66 @@ bool isValidDate(const std::string& date) {
 
     return true;
 }
+
+
+string convertToString(char* a, int size)
+{
+    int i;
+    string s = "";
+    for (i = 0; i < size; i++) {
+        s = s + a[i];
+    }
+    return s;
+}
+
+string Rejust_date(string date_r){
+
+    if(date_r[1] == '/' && date_r[3] == '/'){
+            date_str[0] = '0';
+            date_str[1] = date_r[0];
+            date_str[2] = '/';
+            date_str[3] = '0';
+            date_str[4] = date_r[2];
+            date_str[5] = '/';
+            date_str[6] = date_r[4];
+            date_str[7] = date_r[5];
+            date_str[8] = date_r[6];
+            date_str[9] = date_r[7];
+            int date_size = sizeof(date_str) / sizeof(char);
+            date_r = convertToString(date_str, date_size);
+
+        }else if(date_r[1] == '/' && date_r[3] != '/'){
+            date_str[0] = '0';
+            date_str[1] = date_r[0];
+            date_str[2] = '/';
+            date_str[3] = date_r[2];
+            date_str[4] = date_r[3];
+            date_str[5] = '/';
+            date_str[6] = date_r[5];
+            date_str[7] = date_r[6];
+            date_str[8] = date_r[7];
+            date_str[9] = date_r[8];
+            int date_size = sizeof(date_str) / sizeof(char);
+            date_r = convertToString(date_str, date_size);
+
+        }else if(date_r[1] != '/' && date_r[4] == '/'){
+            date_str[0] = date_r[0];
+            date_str[1] = date_r[1];
+            date_str[2] = '/';
+            date_str[3] = '0';
+            date_str[4] = date_r[3];
+            date_str[5] = '/';
+            date_str[6] = date_r[5];
+            date_str[7] = date_r[6];
+            date_str[8] = date_r[7];
+            date_str[9] = date_r[8];
+            int date_size = sizeof(date_str) / sizeof(char);
+            date_r = convertToString(date_str, date_size);
+        }
+
+        return date_r;
+}
+
 bool isEarlierDate(const std::string &date1, const std::string &date2)
 {
     int day1, month1, year1;
@@ -265,6 +325,9 @@ vector<Round> take_input(string path)
         getline(ss, result, ',');
         int home_goals, away_goals, round_num;
         // Convert the numeric fields to integers
+        
+        date = Rejust_date(date);
+        
         try
         {
             round_num = stoi(round_num_str);
