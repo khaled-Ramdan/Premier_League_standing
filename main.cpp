@@ -293,6 +293,10 @@ vector<Round> take_input(string path)
             cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
             exit(1);
         }
+        else if(!isValidDate(date)){
+            cout << "Error: Invalid Date-> " << date << ", please correct the data in the CSV file and try again.\n";
+            exit(1);
+        }
         int homeTeamId = 0, awayTeamId = 0;
         if (idForTeamName[home_team])
             homeTeamId = idForTeamName[home_team];
