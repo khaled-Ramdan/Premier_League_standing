@@ -31,7 +31,8 @@ public:
             awayTeamWins = 1;
     }
 };
-bool isValidDate(const std::string& date) {
+bool isValidDate(const std::string &date)
+{
     // Check if the string has the correct format "dd/mm/yyyy"
     if (date.size() != 10 || date[2] != '/' || date[5] != '/')
         return false;
@@ -45,15 +46,21 @@ bool isValidDate(const std::string& date) {
         return false;
 
     // Check for specific month and day ranges
-    if (month == 2) {
-        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+    if (month == 2)
+    {
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+        {
             if (day > 29)
                 return false;
-        } else {
+        }
+        else
+        {
             if (day > 28)
                 return false;
         }
-    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+    }
+    else if (month == 4 || month == 6 || month == 9 || month == 11)
+    {
         if (day > 30)
             return false;
     }
@@ -61,63 +68,67 @@ bool isValidDate(const std::string& date) {
     return true;
 }
 
-
-string convertToString(char* a, int size)
+string convertToString(char *a, int size)
 {
     int i;
     string s = "";
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < size; i++)
+    {
         s = s + a[i];
     }
     return s;
 }
 
-string Rejust_date(string date_r){
+string Rejust_date(string date_r)
+{
 
-    if(date_r[1] == '/' && date_r[3] == '/'){
-            date_str[0] = '0';
-            date_str[1] = date_r[0];
-            date_str[2] = '/';
-            date_str[3] = '0';
-            date_str[4] = date_r[2];
-            date_str[5] = '/';
-            date_str[6] = date_r[4];
-            date_str[7] = date_r[5];
-            date_str[8] = date_r[6];
-            date_str[9] = date_r[7];
-            int date_size = sizeof(date_str) / sizeof(char);
-            date_r = convertToString(date_str, date_size);
+    if (date_r[1] == '/' && date_r[3] == '/')
+    {
+        date_str[0] = '0';
+        date_str[1] = date_r[0];
+        date_str[2] = '/';
+        date_str[3] = '0';
+        date_str[4] = date_r[2];
+        date_str[5] = '/';
+        date_str[6] = date_r[4];
+        date_str[7] = date_r[5];
+        date_str[8] = date_r[6];
+        date_str[9] = date_r[7];
+        int date_size = sizeof(date_str) / sizeof(char);
+        date_r = convertToString(date_str, date_size);
+    }
+    else if (date_r[1] == '/' && date_r[3] != '/')
+    {
+        date_str[0] = '0';
+        date_str[1] = date_r[0];
+        date_str[2] = '/';
+        date_str[3] = date_r[2];
+        date_str[4] = date_r[3];
+        date_str[5] = '/';
+        date_str[6] = date_r[5];
+        date_str[7] = date_r[6];
+        date_str[8] = date_r[7];
+        date_str[9] = date_r[8];
+        int date_size = sizeof(date_str) / sizeof(char);
+        date_r = convertToString(date_str, date_size);
+    }
+    else if (date_r[1] != '/' && date_r[4] == '/')
+    {
+        date_str[0] = date_r[0];
+        date_str[1] = date_r[1];
+        date_str[2] = '/';
+        date_str[3] = '0';
+        date_str[4] = date_r[3];
+        date_str[5] = '/';
+        date_str[6] = date_r[5];
+        date_str[7] = date_r[6];
+        date_str[8] = date_r[7];
+        date_str[9] = date_r[8];
+        int date_size = sizeof(date_str) / sizeof(char);
+        date_r = convertToString(date_str, date_size);
+    }
 
-        }else if(date_r[1] == '/' && date_r[3] != '/'){
-            date_str[0] = '0';
-            date_str[1] = date_r[0];
-            date_str[2] = '/';
-            date_str[3] = date_r[2];
-            date_str[4] = date_r[3];
-            date_str[5] = '/';
-            date_str[6] = date_r[5];
-            date_str[7] = date_r[6];
-            date_str[8] = date_r[7];
-            date_str[9] = date_r[8];
-            int date_size = sizeof(date_str) / sizeof(char);
-            date_r = convertToString(date_str, date_size);
-
-        }else if(date_r[1] != '/' && date_r[4] == '/'){
-            date_str[0] = date_r[0];
-            date_str[1] = date_r[1];
-            date_str[2] = '/';
-            date_str[3] = '0';
-            date_str[4] = date_r[3];
-            date_str[5] = '/';
-            date_str[6] = date_r[5];
-            date_str[7] = date_r[6];
-            date_str[8] = date_r[7];
-            date_str[9] = date_r[8];
-            int date_size = sizeof(date_str) / sizeof(char);
-            date_r = convertToString(date_str, date_size);
-        }
-
-        return date_r;
+    return date_r;
 }
 
 bool isEarlierDate(const std::string &date1, const std::string &date2)
@@ -238,7 +249,7 @@ public:
     }
 };
 
-void solve(vector<Round> &rounds , int numOFround, string dateOFmatch)
+void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
 {
     int n;
     Solution sol(numberOfteams, rounds, numOFround, dateOFmatch);
@@ -325,9 +336,9 @@ vector<Round> take_input(string path)
         getline(ss, result, ',');
         int home_goals, away_goals, round_num;
         // Convert the numeric fields to integers
-        
+
         date = Rejust_date(date);
-        
+
         try
         {
             round_num = stoi(round_num_str);
@@ -356,7 +367,8 @@ vector<Round> take_input(string path)
             cout << "Error: Invalid result for " << home_team << " vs. " << away_team << ", please correct the data in the CSV file and try again.\n";
             exit(1);
         }
-        else if(!isValidDate(date)){
+        else if (!isValidDate(date))
+        {
             cout << "Error: Invalid Date-> " << date << ", please correct the data in the CSV file and try again.\n";
             exit(1);
         }
@@ -383,125 +395,105 @@ vector<Round> take_input(string path)
     return inputRounds;
 }
 
+void workwithRound()
+{
 
-void workwithRound(){
+    string input;
+    int number;
 
-	string input ;
-	int number ;
+    do
+    {
+        cout << "Please enter a number : " << endl;
+        getline(cin, input);
 
-	do {
-		cout<<"Please enter a number : "<<endl;
-		getline(cin,input);
+        try
+        {
+            number = stoi(input);
+            string path;
+            cout << "Enter path for csv file: ";
+            getline(cin, path);
+            cout << path << endl;
+            auto rounds = take_input(path);
+            solve(rounds, number);
+            break;
+        }
+        catch (invalid_argument)
+        {
 
-		try{
-			number = stoi(input);
-			break;
+            cout << "invalid input , please enter a valid number ." << endl;
+        }
 
-		}catch (invalid_argument){
-
-			cout<<"invalid input , please enter a valid number ."<<endl;
-		}
-
-  //  solve(vector<Round> &rounds,number);
-
-	}while(true);
-    
-    
-
-
- }
-
-void workwithDate(){
-
-	string date;
-
-	do{
-	    // Taking input from user
-	    cout << "Enter date : ";
-	    cin >> date;
-
-	    if (isValidDate(date)) {
-
-	    	//solve(vector<Round> &rounds,date);
-            
-	    	break;
-	       }
-
-	    else {
-	         std::cout << "Invalid date format. Please enter a valid date in DD/MM/YYYY format." << std::endl;
-	       }
-
-	}while(true);
-
+    } while (true);
 }
 
-//main menu 
+void workwithDate()
+{
+
+    string date;
+
+    do
+    {
+        // Taking input from user
+        cout << "Enter date : ";
+        cin >> date;
+
+        if (isValidDate(date))
+        {
+            string path;
+            cout << "Enter path for csv file: ";
+            getline(cin, path);
+            cout << path << endl;
+            auto rounds = take_input(path);
+            solve(rounds, 0, date);
+            break;
+        }
+
+        else
+        {
+            std::cout << "Invalid date format. Please enter a valid date in DD/MM/YYYY format." << std::endl;
+        }
+
+    } while (true);
+}
+
+// main menu
 
 void MAIN_MENU()
 {
 
-string input ;
+    string input;
 
-do {
+    do
+    {
 
-	cout<<"     Main menu : "<<endl;
-	cout<<"*******************"<<endl;
-	cout<<"1. Work with round "<<endl;
-	cout<<"2. Work with date"<<endl;
-	cout<<"                 "<<endl;
-	cout<<"Enter your choice (1 or 2)"<<endl;
+        cout << "     Main menu : " << endl;
+        cout << "*******************" << endl;
+        cout << "1. Work with round " << endl;
+        cout << "2. Work with date" << endl;
+        cout << "                 " << endl;
+        cout << "Enter your choice (1 or 2)" << endl;
 
+        getline(cin, input);
 
-	getline(cin,input);
+        if (input == "1")
+        {
+            workwithRound();
+            break;
+        }
+        else if (input == "2")
+        {
+            workwithDate();
+            break;
+        }
+        else
+        {
+            cout << "invalid choice,please enter(1 or 2)." << endl;
+        }
 
-
-
-	if(input == "1"){
-		workwithRound();
-		break;
-	}
-	else if(input== "2"){
-		workwithDate();
-		break;
-	}
-	else {
-		cout<<"invalid choice,please enter(1 or 2)."<<endl;
-	}
-
-}while(true);
-
-
+    } while (true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int main()
 {
-    // IO;
-    string path;
-    cout << "Enter path for csv file: ";
-    getline(cin, path);
-    cout << path << endl;
-    auto rounds = take_input(path);
-    solve(rounds);
+    MAIN_MENU();
 }
