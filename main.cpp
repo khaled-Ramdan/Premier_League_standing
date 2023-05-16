@@ -9,6 +9,7 @@ const int dy[9] = {1, -1, 0, 0, -1, 1, 1, -1, 0};
 vector<string> teamNameWithId;
 map<string, int> idForTeamName;
 string round_num_str, date, home_team, away_team, home_goals_str, away_goals_str, result;
+char date_str[10];
 int numberOfteams;
 bool isEarlierDate(const std::string &date1, const std::string &date2);
 class Round
@@ -384,7 +385,7 @@ vector<Round> take_input(string path)
             awayTeamId = idForTeamName[away_team] = teamId++;
 
         Round r = Round(round_num, homeTeamId, awayTeamId, home_goals, away_goals, date, result[0]);
-        inputRounds.push_back(r);
+        if(home_goals_str != "-" && away_goals_str != "-" && result != "-") inputRounds.push_back(r);
     }
     numberOfteams = idForTeamName.size();
     teamNameWithId.resize(numberOfteams + 1);
