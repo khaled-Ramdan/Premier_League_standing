@@ -238,10 +238,10 @@ public:
     }
 };
 
-void solve(vector<Round> &rounds)
+void solve(vector<Round> &rounds , int numOFround, string dateOFmatch)
 {
     int n;
-    Solution sol(numberOfteams, rounds, 0, "17/09/2022");
+    Solution sol(numberOfteams, rounds, numOFround, dateOFmatch);
     auto stand = sol.generateStanding();
     // output file
     ofstream outputFile;
@@ -382,6 +382,128 @@ vector<Round> take_input(string path)
     }
     return inputRounds;
 }
+
+
+void workwithRound(){
+
+	string input ;
+	int number ;
+
+	do {
+		cout<<"Please enter a number : "<<endl;
+		getline(cin,input);
+
+		try{
+			number = stoi(input);
+			break;
+
+		}catch (invalid_argument){
+
+			cout<<"invalid input , please enter a valid number ."<<endl;
+		}
+
+  //  solve(vector<Round> &rounds,number);
+
+	}while(true);
+    
+    
+
+
+ }
+
+void workwithDate(){
+
+	string date;
+
+	do{
+	    // Taking input from user
+	    cout << "Enter date : ";
+	    cin >> date;
+
+	    if (isValidDate(date)) {
+
+	    	//solve(vector<Round> &rounds,date);
+            
+	    	break;
+	       }
+
+	    else {
+	         std::cout << "Invalid date format. Please enter a valid date in DD/MM/YYYY format." << std::endl;
+	       }
+
+	}while(true);
+
+}
+
+//main menu 
+
+void MAIN_MENU()
+{
+
+string input ;
+
+do {
+
+	cout<<"     Main menu : "<<endl;
+	cout<<"*******************"<<endl;
+	cout<<"1. Work with round "<<endl;
+	cout<<"2. Work with date"<<endl;
+	cout<<"                 "<<endl;
+	cout<<"Enter your choice (1 or 2)"<<endl;
+
+
+	getline(cin,input);
+
+
+
+	if(input == "1"){
+		workwithRound();
+		break;
+	}
+	else if(input== "2"){
+		workwithDate();
+		break;
+	}
+	else {
+		cout<<"invalid choice,please enter(1 or 2)."<<endl;
+	}
+
+}while(true);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int main()
 {
     // IO;
