@@ -35,9 +35,9 @@ public:
 bool isValidDate(const std::string &date)
 {
     // Check if the string has the correct format "dd/mm/yyyy"
-    if (date.size() != 10 || date[2] != '/' || date[5] != '/')
+    int cnt = count(date.begin(), date.end(), '/');
+    if (cnt != 2)
         return false;
-
     int day, month, year;
     if (sscanf(date.c_str(), "%d/%d/%d", &day, &month, &year) != 3)
         return false;
@@ -174,7 +174,7 @@ public:
         int goalDiff = goalsFor - goalsAgainst;
         int otherDiff = other.goalsFor - other.goalsAgainst;
         if (otherDiff != goalDiff)
-            return otherDiff < otherDiff;
+            return otherDiff < goalDiff;
         if (goalsFor != other.goalsFor)
             return other.goalsFor < goalsFor;
         return goalsAgainst < other.goalsAgainst;
@@ -385,7 +385,8 @@ vector<Round> take_input(string path)
             awayTeamId = idForTeamName[away_team] = teamId++;
 
         Round r = Round(round_num, homeTeamId, awayTeamId, home_goals, away_goals, date, result[0]);
-        if(home_goals_str != "-" && away_goals_str != "-" && result != "-") inputRounds.push_back(r);
+        if (home_goals_str != "-" && away_goals_str != "-" && result != "-")
+            inputRounds.push_back(r);
     }
     numberOfteams = idForTeamName.size();
     teamNameWithId.resize(numberOfteams + 1);
@@ -436,7 +437,7 @@ void workwithDate()
     {
         // Taking input from user
         cout << "Enter date : ";
-        cin >> date;
+        getline(cin, date);
 
         if (isValidDate(date))
         {
