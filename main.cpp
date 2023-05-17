@@ -12,6 +12,8 @@ string round_num_str, date, home_team, away_team, home_goals_str, away_goals_str
 char date_str[10];
 int numberOfteams;
 bool isEarlierDate(const std::string &date1, const std::string &date2);
+string outputfile, outpath;
+
 class Round
 {
 public:
@@ -257,7 +259,8 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
     auto stand = sol.generateStanding();
     // output file
     ofstream outputFile;
-    outputFile.open("outputFile.csv");
+    outpath += "\\";
+    outputFile.open(outpath + outputfile + ".csv");
     if (!outputFile.is_open())
     {
         cout << "Error in opening the output file\n";
@@ -298,12 +301,26 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
                    << it.goalsFor - it.goalsAgainst << ","
                    << it.win * 3 + it.draw
                    << endl;
-        cout << i << "   " << it.teamName << " " << it.win << " " << it.draw << " " << it.loss << endl;
     }
 
     outputFile.close();
 
     ////
+}
+
+void outputpath()
+{
+
+    cout << "Enter path of the output file : ";
+    getline(cin, outpath);
+    return;
+}
+void outfile()
+{
+
+    cout << "Enter output file name : ";
+    getline(cin, outputfile);
+    return;
 }
 vector<Round> take_input(string path)
 {
@@ -416,8 +433,22 @@ void workwithRound()
             getline(cin, path);
             cout << path << endl;
             auto rounds = take_input(path);
-            solve(rounds, number);
-            break;
+            outputpath();
+            while (true)
+            {
+
+                if (filesystem::exists(outpath))
+                {
+                    outfile();
+                    solve(rounds, 0, date);
+                    break;
+                }
+                else
+                {
+                    cout << "wrong path  \n";
+                    outputpath();
+                }
+            }
         }
         catch (invalid_argument)
         {
@@ -446,8 +477,23 @@ void workwithDate()
             getline(cin, path);
             cout << path << endl;
             auto rounds = take_input(path);
-            solve(rounds, 0, date);
-            break;
+
+            outputpath();
+            while (true)
+            {
+
+                if (filesystem::exists(outpath))
+                {
+                    outfile();
+                    solve(rounds, 0, date);
+                    break;
+                }
+                else
+                {
+                    cout << "wrong path  \n";
+                    outputpath();
+                }
+            }
         }
 
         else
