@@ -287,6 +287,7 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
                << ","
                << "Points"
                << endl;
+    
     for (int i = 1; i < stand.size(); i++)
     {
         auto it = stand[i];
@@ -301,6 +302,8 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
                    << it.goalsFor - it.goalsAgainst << ","
                    << it.win * 3 + it.draw
                    << endl;
+
+       
     }
 
     outputFile.close();
