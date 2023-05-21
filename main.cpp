@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <windows.h>
 using namespace std;
 #define IO ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 typedef long long ll;
@@ -13,7 +14,7 @@ char date_str[10];
 int numberOfteams;
 bool isEarlierDate(const std::string &date1, const std::string &date2);
 string outputfile, outpath;
-
+void gotoxy(short a, short b); // function declaration
 class Round
 {
 public:
@@ -287,7 +288,19 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
                << ","
                << "Points"
                << endl;
-    
+
+    system("cls"); // clear terminal
+    printf("%-4s", "#");
+    printf("%-22s", "Team");
+    printf("%19s", "MAPL");
+    printf("%5s", "W");
+    printf("%5s", "D");
+    printf("%5s", "L");
+    printf("%15s", "Goals For");
+    printf("%15s", "Goals Against");
+    printf("%10s", "G Diff");
+    printf("%10s", "Points\n");
+
     for (int i = 1; i < stand.size(); i++)
     {
         auto it = stand[i];
@@ -303,7 +316,18 @@ void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
                    << it.win * 3 + it.draw
                    << endl;
 
-       
+        printf("%-4d", i);
+        printf("%-20s", it.teamName.c_str());
+        printf("%20d", it.win + it.draw + it.loss);
+        printf("%7d", it.win);
+        printf("%4d", it.draw);
+        printf("%5d", it.loss);
+        printf("%15d", it.goalsFor);
+        printf("%15d", it.goalsAgainst);
+        printf("%10d", it.goalsFor - it.goalsAgainst);
+        printf("%10d\n", it.win * 3 + it.draw);
+
+        // coordy++ ;
     }
 
     outputFile.close();
