@@ -1,12 +1,7 @@
 #include <bits/stdc++.h>
 #include <windows.h>
 using namespace std;
-#define IO ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 typedef long long ll;
-const long long N = 3e5 + 7, Mod = 1e9 + 7, INF = 2e18;
-ll inv(ll a, ll b = Mod) { return 1 < a ? b - inv(b % a, a) * b / a : 1; }
-const int dx[9] = {0, 0, 1, -1, 1, 1, -1, -1, 0};
-const int dy[9] = {1, -1, 0, 0, -1, 1, 1, -1, 0};
 vector<string> teamNameWithId;
 map<string, int> idForTeamName;
 string round_num_str, date, home_team, away_team, home_goals_str, away_goals_str, result;
@@ -14,7 +9,6 @@ char date_str[10];
 int numberOfteams;
 bool isEarlierDate(const std::string &date1, const std::string &date2);
 string outputfile, outpath;
-void gotoxy(short a, short b); // function declaration
 class Round
 {
 public:
@@ -186,13 +180,14 @@ public:
 class Solution
 {
 public:
+    // space =>   O(n^2)
     vector<vector<pair<int, Round>>> leagueGraph;
     vector<bool> visitedTeam;
     int wantedRound;
     string wantedDate;
     vector<Team> answer;
     Solution(int numberOfTeams, vector<Round> leageRounds, int wantedRound = 0, string wantedDate = "")
-    {
+    {// teams ==> n  ,  Rounds = n (n-1) = O(N^2)
         this->wantedRound = wantedRound;
         this->wantedDate = wantedDate;
         answer.resize(numberOfTeams + 1); // 21 [0 1 20]
@@ -204,7 +199,7 @@ public:
         dfs(1);
     }
     void dfs(int teamId)
-    {
+    { // n + n (n-1) =>  n^2 ==> O(n*2) 
         visitedTeam[teamId] = true;
         for (auto &match : leagueGraph[teamId])
         {
@@ -214,7 +209,7 @@ public:
         }
     }
     void calculate(Round round, int homeTeamId, int awayTeamId)
-    {
+    {  // O(1)
         if (wantedRound and round.roundNumber > wantedRound) // 17
             return;
 
@@ -242,7 +237,7 @@ public:
         }
     }
     vector<Team> generateStanding()
-    {
+    { // O(n log n) ==> sorting 
         for (int i = 1; i < answer.size(); i++) // int a[20]; [0.. 19]
         {
             answer[i].teamId = i; // pos = 1 => id = 1
@@ -254,11 +249,11 @@ public:
 };
 
 void solve(vector<Round> &rounds, int numOFround, string dateOFmatch = "")
-{
+{ // n^2 
     int n;
-    Solution sol(numberOfteams, rounds, numOFround, dateOFmatch);
-    auto stand = sol.generateStanding();
-    // output file
+    Solution sol(numberOfteams, rounds, numOFround, dateOFmatch);//N^2 
+    auto stand = sol.generateStanding(); // n log n
+    // output file O(N) 
     ofstream outputFile;
     outpath += "\\";
     outputFile.open(outpath + outputfile + ".csv");
@@ -350,7 +345,7 @@ void outfile()
     return;
 }
 vector<Round> take_input(string path)
-{
+{// O(log n) ==> using map 
     vector<Round> inputRounds;
     // Open the CSV file for reading
     ifstream input_file(path);
@@ -427,13 +422,14 @@ vector<Round> take_input(string path)
             awayTeamId = idForTeamName[away_team];
         else
             awayTeamId = idForTeamName[away_team] = teamId++;
-
+// space compleixty ==> N^2 
         Round r = Round(round_num, homeTeamId, awayTeamId, home_goals, away_goals, date, result[0]);
         if (home_goals_str != "-" && away_goals_str != "-" && result != "-")
             inputRounds.push_back(r);
     }
     numberOfteams = idForTeamName.size();
     teamNameWithId.resize(numberOfteams + 1);
+    // space O(n)
     for (auto &it : idForTeamName)
     {
         teamNameWithId[it.second] = it.first;
@@ -467,7 +463,7 @@ void workwithRound()
                 if (filesystem::exists(outpath))
                 {
                     outfile();
-                    solve(rounds, 0, date);
+                    solve(rounds, number);
                     break;
                 }
                 else
@@ -572,4 +568,3 @@ int main()
 {
     MAIN_MENU();
 }
-
